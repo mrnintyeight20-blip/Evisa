@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>evisa-gov-kg-evisa</title>
+
+  <style>
+    body{
+      margin:0;
+      padding:0;
+      background:white;
+      font-family:Georgia, serif;
+      color:#111;
+    }
+
+    header{
+      background:#111;
+      color:white;
+      padding:16px;
+      font-size:14px;
+    }
+
+    .container{
+      max-width:900px;
+      margin:80px auto;
+      padding:20px;
+    }
+
+    .upload-box{
+      border:1px solid #ddd;
+      padding:40px;
+      background:white;
+    }
+
+    h1{
+      font-weight:normal;
+      margin-bottom:30px;
+    }
+
+    input[type="file"]{
+      width:100%;
+      padding:12px;
+      margin-bottom:20px;
+      border:1px solid #ccc;
+    }
+
+    button{
+      padding:10px 18px;
+      border:1px solid #111;
+      background:white;
+      cursor:pointer;
+      font-family:Georgia, serif;
+    }
+
+    button:hover{
+      background:#111;
+      color:white;
+    }
+
+    .output{
+      margin-top:30px;
+      word-break:break-word;
+    }
+
+    .qr-preview{
+      margin-top:40px;
+    }
+
+    canvas{
+      max-width:220px;
+    }
+
+    @media(max-width:768px){
+
+      .container{
+        margin:40px auto;
+      }
+
+      .upload-box{
+        padding:20px;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  evisa-gov-kg-evisa.pages.dev
+</header>
+
+<div class="container">
+
+  <div class="upload-box">
+
+    <h1>Document Verification Portal</h1>
+
+    <input type="file" id="pdfUpload" accept="application/pdf">
+
+    <button onclick="generateQR()">
+      Generate QR
+    </button>
+
+    <div class="output">
+      <p id="verificationLink"></p>
+    </div>
+
+    <div class="qr-preview">
+      <canvas id="qrCanvas"></canvas>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+<script>
+
+function generateQR(){
+
+  const fileInput = document.getElementById('pdfUpload');
+  const file = fileInput.files[0];
+
+  if(!file){
+    alert('Please upload a PDF file');
+    return;
+  }
+
+  const verificationId = Math.floor(Math.random() * 999999);
+
+  const verifyURL =
+    window.location.origin +
+    '/verify.html?id=' +
+    verificationId;
+
+  document.getElementById('verificationLink').innerHTML =
+    'Verification URL:<br>' + verifyURL;
+
+  QRCode.toCanvas(
+    document.getElementById('qrCanvas'),
+    verifyURL
+  );
+
+}
+
+</script>
+
+</body>
+</html>
